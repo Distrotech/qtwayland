@@ -54,7 +54,7 @@ public:
     QWaylandXCompositeBuffer(struct wl_xcomposite *xcomposite,
                              uint32_t window,
                              const QSize &size);
-
+    ~QWaylandXCompositeBuffer();
     QSize size() const;
 private:
     QSize mSize;

@@ -57,3 +57,8 @@ QSize QWaylandXCompositeBuffer::size() const
 {
     return mSize;
 }
+
+QWaylandXCompositeBuffer::~QWaylandXCompositeBuffer()
+{
+    wl_buffer_destroy(mBuffer);
+}

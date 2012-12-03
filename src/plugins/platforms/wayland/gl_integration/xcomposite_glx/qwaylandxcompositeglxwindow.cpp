@@ -54,7 +54,6 @@ QWaylandXCompositeGLXWindow::QWaylandXCompositeGLXWindow(QWindow *window, QWayla
     , m_glxIntegration(glxIntegration)
     , m_xWindow(0)
     , m_config(qglx_findConfig(glxIntegration->xDisplay(), glxIntegration->screen(), window->format(), GLX_WINDOW_BIT | GLX_PIXMAP_BIT))
-    , m_buffer(0)
     , m_syncCallback(0)
 {
 }
@@ -70,8 +69,8 @@ void QWaylandXCompositeGLXWindow::setGeometry(const QRect &rect)
     QWaylandWindow::setGeometry(rect);
 
     if (m_xWindow) {
-        delete m_buffer;
-
+        delete mBuffer;
+        mBuffer = 0;
         XDestroyWindow(m_glxIntegration->xDisplay(), m_xWindow);
         m_xWindow = 0;
     }
@@ -130,10 +129,10 @@ void QWaylandXCompositeGLXWindow::createSurface()
     XMapWindow(m_glxIntegration->xDisplay(), m_xWindow);
 
     XSync(m_glxIntegration->xDisplay(), False);
-    m_buffer = new QWaylandXCompositeBuffer(m_glxIntegration->waylandXComposite(),
+    mBuffer = new QWaylandXCompositeBuffer(m_glxIntegration->waylandXComposite(),
                                             (uint32_t)m_xWindow,
                                             size);
-    attach(m_buffer);
+    attach(mBuffer);
     waitForSync();
 }
 

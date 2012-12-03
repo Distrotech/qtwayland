@@ -68,8 +68,6 @@ private:
     Window m_xWindow;
     GLXFBConfig m_config;
 
-    QWaylandBuffer *m_buffer;
-
     void waitForSync();
     wl_callback *m_syncCallback;
 

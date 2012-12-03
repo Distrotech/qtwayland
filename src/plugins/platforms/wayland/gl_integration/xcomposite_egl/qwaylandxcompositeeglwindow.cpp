@@ -57,7 +57,6 @@ QWaylandXCompositeEGLWindow::QWaylandXCompositeEGLWindow(QWindow *window, QWayla
     : QWaylandWindow(window)
     , m_glxIntegration(glxIntegration)
     , m_context(0)
-    , m_buffer(0)
     , m_xWindow(0)
     , m_config(q_configFromGLFormat(glxIntegration->eglDisplay(), window->format(), true, EGL_WINDOW_BIT | EGL_PIXMAP_BIT))
     , m_surface(0)
@@ -96,7 +95,8 @@ void QWaylandXCompositeEGLWindow::createEglSurface()
         size = QSize(1,1);
     }
 
-    delete m_buffer;
+    delete mBuffer;
+    mBuffer = 0;
     //XFreePixmap deletes the glxPixmap as well
     if (m_xWindow) {
         XDestroyWindow(m_glxIntegration->xDisplay(), m_xWindow);
@@ -128,10 +128,10 @@ void QWaylandXCompositeEGLWindow::createEglSurface()
     }
 
     XSync(m_glxIntegration->xDisplay(),False);
-    m_buffer = new QWaylandXCompositeBuffer(m_glxIntegration->waylandXComposite(),
+    mBuffer = new QWaylandXCompositeBuffer(m_glxIntegration->waylandXComposite(),
                                            (uint32_t)m_xWindow,
                                            size);
-    attach(m_buffer);
+    attach(mBuffer);
 
     m_waitingForSync = true;
     struct wl_callback *callback = wl_display_sync(m_glxIntegration->waylandDisplay()->wl_display());
